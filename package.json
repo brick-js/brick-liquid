@@ -1,0 +1,27 @@
+{
+  "name": "brick-liquid",
+  "version": "1.0.1",
+  "description": "liquid template engine for brick.js",
+  "author": {
+    "name": "harttle"
+  },
+  "main": "index.js",
+  "homepage": "https://github.com/harttle/brick-liquid#readme",
+  "bugs": {
+    "url": "https://github.com/harttle/brick-liquid/issues"
+  },
+  "dependencies": {
+    "debug": "^2.2.0",
+    "liquid-node": "^2.6.1",
+    "lodash": "^3.10.1"
+  },
+  "devDependencies": {},
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harttle/brick-liquid.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
