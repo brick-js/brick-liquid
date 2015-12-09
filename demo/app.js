@@ -6,20 +6,24 @@ var logger = require('morgan');
 var path = require('path');
 var brickJs = require('brick.js');
 var Liquid = require('..');
+var debug = require('debug')('demo:app');
 
 // liquid usage
-var liquid = new Liquid({
-    cache: false
-});
+var liquid = new Liquid();
+
 liquid.registerFilters({
-    myFilter: input => String(input).toUpperCase()
+    UpperCase: input => String(input).toUpperCase()
 });
-class MyTag extends Liquid.Tag {
-    render() {
-        return "that's me!";
+
+class UserDetailBtn extends Liquid.Tag {
+    render(ctx) {
+        var locals = Liquid.extractLocals(ctx);
+        return `<button class="btn btn-primary">
+        访问${locals.user.name}！</button>`;
     }
 }
-liquid.registerTag("MyTag", MyTag);
+
+liquid.registerTag("userBtn", UserDetailBtn);
 
 // express app 
 var app = express();
