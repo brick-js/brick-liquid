@@ -1,6 +1,6 @@
 {
   "name": "brick-liquid",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "liquid template engine for brick.js",
   "author": {
     "name": "harttle"
@@ -13,7 +13,7 @@
   "dependencies": {
     "debug": "^2.2.0",
     "liquid-node": "^2.6.1",
-    "lodash": "^3.10.1"
+    "lodash": "^4.6.1"
   },
   "devDependencies": {},
   "license": "ISC",
