@@ -124,20 +124,20 @@ Registration of new tag is compatible with [sirlantis/liquid-node][sirlantis/liq
 Javascript:
 
 ```javascript
-class UserDetailBtn extends Liquid.Tag {
+class UserAnchor extends Liquid.Tag {
     render(ctx) {
         var locals = Liquid.extractLocals(ctx),
             user = locals.user;
         return `<a href="/users/${user.id}">${user.name}</a>`;
     }
 }
-liquid.registerTag("userBtn", UserDetailBtn);
+liquid.registerTag("UserAnchor ", UserAnchor);
 ```
 
 Template:
 
 ```html
-{% userBtn %}
+{% UserAnchor %}
 ```
 
 will be rendered as: 
