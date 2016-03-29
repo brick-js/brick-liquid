@@ -1,6 +1,6 @@
 {
   "name": "brick-liquid",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "liquid template engine for brick.js",
   "author": {
     "name": "harttle"
