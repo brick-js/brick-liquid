@@ -13,33 +13,25 @@ Object.defineProperty(
 
 describe('include tag', function() {
     var root = Path.resolve(__dirname, '../cases'),
-        liquid = Liquid();
+        liquid = Liquid(),
+        user = { name: 'harttle' };
 
-    it('should handle include tag', function() {
-        return liquid.render(path('navbar.liquid'), {}, c => Promise.resolve('user'))
-            .should.eventually.equal('before' + 'user' + 'after\n');
-    });
     it('should inherit parent context', function() {
-        var pctrl = (mid, ctx) => Promise.resolve(mid + ',' + ctx.name);
-        return liquid.render(path('navbar.liquid'), {
-                name: 'harttle'
-            }, pctrl)
-            .should.eventually.equal('before' + 'user,harttle' + 'after\n');
+        return liquid.render(path('navbar.liquid'), user, render)
+            .should.eventually.equal('before<p>harttle</p>\nafter\n');
     });
     it('should accept hash context', function() {
-        var pctrl = (mid, ctx) => Promise.resolve(mid + ',' + ctx.name);
-        return liquid.render(path('user-list.liquid'), {
-                user: {
-                    name: 'harttle'
-                }
-            }, pctrl)
-            .should.eventually.equal('user,harttle\n');
+        return liquid.render(path('user-list.liquid'), {user}, render)
+            .should.eventually.equal('<p>harttle</p>\n\n');
     });
     it('should accept string hash context', function() {
-        var pctrl = (mid, ctx) => Promise.resolve(mid + ',' + ctx.name);
-        return liquid.render(path('user-array.liquid'), {}, pctrl)
-            .should.eventually.equal('user,harttle\n');
+        return liquid.render(path('user-array.liquid'), {}, render)
+            .should.eventually.equal('<p>harttle</p>\n\n');
     });
+
+    function render(mid, ctx){
+        return liquid.render(path(`${mid}.liquid`), ctx, render);
+    }
 });
 
 function path(p) {

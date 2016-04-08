@@ -16,26 +16,21 @@ describe('extend tag', function() {
     var liquid = Liquid();
     var ctx = {name: 'harttle'};
 
-    it('should handle extend tag', function() {
-        var layout = 'before' + 'liquid-pending-block' + 'after';
-        return liquid.render(path('home.liquid'), ctx, c => Promise.resolve(layout))
-            .should.eventually.equal('before\n' + '<p>harttle</p>\n' + 'after');
-    });
     it('should pass context to parent', function() {
-        var pctrl = (mid, c) => Promise.resolve('liquid-pending-block' + mid + c.name);
-        return liquid.render(path('home.liquid'), ctx, pctrl)
-            .should.eventually.equal('\n' + '<p>harttle</p>\n' + 'layoutharttle');
+        return liquid.render(path('home.liquid'), ctx, render)
+            .should.eventually.equal('\n<p>harttle</p>\nharttle\n');
     });
     it('should pass hash context to parent', function() {
-        var pctrl = (mid, c) => Promise.resolve('liquid-pending-block' + mid + c.title);
-        return liquid.render(path('account.liquid'), ctx, pctrl)
-            .should.eventually.equal('\n' + '<p>harttle</p>\n' + 'layoutharttle');
+        return liquid.render(path('account.liquid'), ctx, render)
+            .should.eventually.equal('harttle\n<p>harttle</p>\nharttle\n');
     });
     it('should pass string hash context to parent', function() {
-        var pctrl = (mid, ctx) => Promise.resolve('liquid-pending-block' + mid + ctx.title);
-        return liquid.render(path('about.liquid'), ctx, pctrl)
-            .should.eventually.equal('\n<p>harttle</p>\nlayoutharttle');
+        return liquid.render(path('about.liquid'), ctx, render)
+            .should.eventually.equal('harttle\n<p>harttle</p>\nharttle\n');
     });
+    function render(mid, ctx){
+        return liquid.render(path(`${mid}.liquid`), ctx, render);
+    }
 });
 
 function path(p) {

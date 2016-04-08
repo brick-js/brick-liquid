@@ -75,11 +75,11 @@ Above module `homepage` extends module `default`:
   <title>{{title}}</title>
   <meta charset="UTF-8">
 </head>
-<body> {% block %} </body>
+<body> {{ block }} </body>
 </html>
 ```
 
-`homepage` will be rendered and then replace `{% block %}` declaration in `default`.
+`homepage` will be rendered and then replace `{{ block }}` declaration in `default`.
 
 > Note: local context within `homepage` will be passed into `default`.
 
