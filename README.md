@@ -1,18 +1,8 @@
+[![NPM version](https://img.shields.io/npm/v/brick-liquid.svg?style=flat)](https://www.npmjs.org/package/brick-liquid)
+[![Build Status](https://travis-ci.org/brick-js/brick-liquid.svg?branch=master)](https://travis-ci.org/brick-js/brick-liquid)
+[![Dependency manager](https://david-dm.org/brick-js/brick-liquid.png)](https://david-dm.org/brick-js/brick-liquid)
 
 Liquid Template Engine for [Brick.js][brk], implemented with [sirlantis/liquid-node][sirlantis/liquid-node].
-
-## Run the Demo
-
-`demo/` directory contains a demo project. Run the demo:
-
-```bash
-git clone git@github.com:harttle/brick-liquid.git
-cd brick-hbs && npm install
-cd demo && npm install
-grunt
-```
-
-Open http://localhost:3000 in your browser!
 
 ## Installation
 
@@ -147,5 +137,5 @@ will be rendered as:
 <a href="/users/123">alice</a>
 ```
 
-[brk]: https://github.com/harttle/brick-hbs
+[brk]: https://github.com/brick-js/brick.js
 [sirlantis/liquid-node]: https://github.com/sirlantis/liquid-node
