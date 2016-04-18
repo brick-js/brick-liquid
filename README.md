@@ -1,5 +1,6 @@
 [![NPM version](https://img.shields.io/npm/v/brick-liquid.svg?style=flat)](https://www.npmjs.org/package/brick-liquid)
 [![Build Status](https://travis-ci.org/brick-js/brick-liquid.svg?branch=master)](https://travis-ci.org/brick-js/brick-liquid)
+[![Coverage Status](https://coveralls.io/repos/github/brick-js/brick-liquid/badge.svg?branch=master)](https://coveralls.io/github/brick-js/brick-liquid?branch=master)
 [![Dependency manager](https://david-dm.org/brick-js/brick-liquid.png)](https://david-dm.org/brick-js/brick-liquid)
 
 Liquid Template Engine for [Brick.js][brk], implemented with [sirlantis/liquid-node][sirlantis/liquid-node].
