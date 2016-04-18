@@ -17,20 +17,20 @@ describe('include tag', function() {
         user = { name: 'harttle' };
 
     it('should inherit parent context', function() {
-        return liquid.render(path('navbar.liquid'), user, render)
+        return liquid.render(path('navbar.liquid'), user, x => x, render)
             .should.eventually.equal('before<p>harttle</p>\nafter\n');
     });
     it('should accept hash context', function() {
-        return liquid.render(path('user-list.liquid'), {user}, render)
+        return liquid.render(path('user-list.liquid'), {user}, x => x, render)
             .should.eventually.equal('<p>harttle</p>\n\n');
     });
     it('should accept string hash context', function() {
-        return liquid.render(path('user-array.liquid'), {}, render)
+        return liquid.render(path('user-array.liquid'), {}, x => x, render)
             .should.eventually.equal('<p>harttle</p>\n\n');
     });
 
     function render(mid, ctx){
-        return liquid.render(path(`${mid}.liquid`), ctx, render);
+        return liquid.render(path(`${mid}.liquid`), ctx, x => x, render);
     }
 });
 

@@ -17,19 +17,19 @@ describe('extend tag', function() {
     var ctx = {name: 'harttle'};
 
     it('should pass context to parent', function() {
-        return liquid.render(path('home.liquid'), ctx, render)
+        return liquid.render(path('home.liquid'), ctx, x => x, render)
             .should.eventually.equal('\n<p>harttle</p>\nharttle\n');
     });
     it('should pass hash context to parent', function() {
-        return liquid.render(path('account.liquid'), ctx, render)
+        return liquid.render(path('account.liquid'), ctx, x => x, render)
             .should.eventually.equal('harttle\n<p>harttle</p>\nharttle\n');
     });
     it('should pass string hash context to parent', function() {
-        return liquid.render(path('about.liquid'), ctx, render)
+        return liquid.render(path('about.liquid'), ctx, x => x, render)
             .should.eventually.equal('harttle\n<p>harttle</p>\nharttle\n');
     });
     function render(mid, ctx){
-        return liquid.render(path(`${mid}.liquid`), ctx, render);
+        return liquid.render(path(`${mid}.liquid`), ctx, x => x, render);
     }
 });
 
