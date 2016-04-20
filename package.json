@@ -1,6 +1,6 @@
 {
   "name": "brick-liquid",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "liquid template engine for brick.js",
   "author": {
     "name": "harttle"
@@ -17,9 +17,10 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
     "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
-    "chai-as-promised": "^5.3.0"
+    "mocha": "^2.4.5"
   },
   "license": "ISC",
   "repository": {
