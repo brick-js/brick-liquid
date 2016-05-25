@@ -17,16 +17,14 @@ npm install -S brick-liquid
 var brickJs = require('brick.js');
 var Liquid = require('brick-liquid');
 
-var brk = brickJs({
-    root: path.join(__dirname, 'modules')
-});
+var brk = brickJs();
 
 var liquid = new Liquid({
     cache: false    // disabled by default, see below
 });
 
-brk.engine('liquid', liquid);   // set liquid engine for .liquid file 
-brk.engine('html', liquid);     // set liquid engine for .html file
+brk.engine('.liquid', liquid);   // set liquid engine for .liquid file 
+brk.engine('.html', liquid);     // set liquid engine for .html file
 
 app.use('/', brk.express);
 ```
