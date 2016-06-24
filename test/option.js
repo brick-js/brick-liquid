@@ -1,54 +1,44 @@
-var chai = require("chai");
-var should = chai.should();
-var Liquid = require('..');
-var Path = require('path');
-var fs = require('fs');
+const chai = require("chai");
+const mock = require('mock-fs');
+const should = chai.should();
+const Liquid = require('..');
 chai.use(require("chai-as-promised"));
-var tmp = '/tmp/brick-liquid-test.liquid';
-
-Object.defineProperty(
-    Promise.prototype,
-    'should',
-    Object.getOwnPropertyDescriptor(Object.prototype, 'should')
-);
 
 describe('options', function() {
+    var ctx = {
+        name: 'harttle'
+    };
+    beforeEach(function(){
+        mock({
+            '/user.liquid': "<p>{{ name }}{{ id }}</p>",
+            '/tmp.liquid': '{{ name }}'
+        });
+    });
+    afterEach(function(){
+        mock.restore();
+    });
+
     it('should allow empty config', function() {
         var liquid = Liquid();
-        var p = Path.resolve(__dirname, '../cases/user.liquid');
-        return liquid.render(p, {
-                name: 'harttle'
-            })
-            .should.eventually.equal('<p>harttle</p>\n');
+        return liquid.render('/user.liquid', ctx)
+            .should.eventually.equal('<p>harttle</p>');
     });
     it('should respect cache:true', function() {
         var liquid = Liquid({
             cache: true
         });
-        fs.writeFileSync(tmp, '{{ name }}', 'utf-8');
-
-        return liquid.render(tmp, {
-                name: 'harttle'
-            })
-            .then(x => fs.writeFileSync(tmp, 'before{{ name }}', 'utf-8'))
-            .then(x => liquid.render(tmp, {
-                name: 'harttle'
-            }))
+        return liquid.render('/tmp.liquid', ctx)
+            .then(x => mock({'/tmp.liquid': 'before{{ name }}'}))
+            .then(x => liquid.render('/tmp.liquid', ctx))
             .should.eventually.equal('harttle');
     });
     it('should respect cache:false', function() {
         var liquid = Liquid({
             cache: false
         });
-        fs.writeFileSync(tmp, '{{ name }}', 'utf-8');
-
-        return liquid.render(tmp, {
-                name: 'harttle'
-            })
-            .then(x => fs.writeFileSync(tmp, 'before{{ name }}', 'utf-8'))
-            .then(x => liquid.render(tmp, {
-                name: 'harttle'
-            }))
+        return liquid.render('/tmp.liquid', ctx)
+            .then(x => mock({'/tmp.liquid': 'before{{ name }}'}))
+            .then(x => liquid.render('/tmp.liquid', ctx))
             .should.eventually.equal('beforeharttle');
     });
 });
