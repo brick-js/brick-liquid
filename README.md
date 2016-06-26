@@ -19,7 +19,7 @@ var Liquid = require('brick-liquid');
 
 var brk = brickJs();
 
-var liquid = new Liquid({
+var liquid = Liquid({
     cache: false    // disabled by default, see below
 });
 
@@ -46,33 +46,32 @@ Sub-modules are imported by `include`. For example:
 
 Above template will import module `user-list` in `root` directory with local context.
 
-## Layout Extend 
+## Layouts
 
-Brick-liquid implemented async helper internaly, to support layout extend. Eg: 
+Brick-liquid render is implemented asyncly to support template layout.
+
+Module `homepage`:
 
 ```html
-<!-- module: homepage -->
-{%extend 'default'%}
+{%layout 'default'%}
 <div class="container"> Hello! </div>
 ```
 
-Above module `homepage` extends module `default`: 
+Module `default`: 
 
 ```html
-<!-- module: default -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{{title}}</title>
   <meta charset="UTF-8">
 </head>
-<body> {{ block }} </body>
+<body> {% block %} </body>
 </html>
 ```
 
-`homepage` will be rendered and then replace `{{ block }}` declaration in `default`.
-
-> Note: local context within `homepage` will be passed into `default`.
+`homepage` will be rendered and then replace `{% block %}` declaration in `default`.
+In the meantime, the local context within `homepage` will be passed into `default`.
 
 ## Options
 
@@ -86,23 +85,24 @@ If set to `true`, all templates will be loaded only once (for production usage).
 
 ## Registration of New Filter
 
-Brick-liquid is implemented with [sirlantis/liquid-node][sirlantis/liquid-node] internaly. And the `liquid` object defined above is compatible with [sirlantis/liquid-node][sirlantis/liquid-node] `engine` object.
+Brick-liquid is implemented with [harttle/shopify-liquid][impl] internaly. 
+And the `liquid` object defined above is compatible with [harttle/shopify-liquid][impl] `engine` object.
 
 Javascript:
 
 ```javascript
-liquid.registerFilters({
-    UpperCase: input => String(input).toUpperCase()
+liquid.registerFilter('upper', function(v){
+  return v.toUpperCase();
 });
 ```
 
 Template:
 
 ```html
-<h3>{{ 'alice' | UpperCase }}</h3>
+<h3>{{ 'alice' | upper }}</h3>
 ```
 
-will be rendered as: 
+Output:
 
 ```html
 <h3>ALICE</h3>
@@ -110,33 +110,33 @@ will be rendered as:
 
 ## Registration of New Tag
 
-Registration of new tag is compatible with [sirlantis/liquid-node][sirlantis/liquid-node].
+Registration of new tag is compatible with [harttle/shopify-liquid][impl].
 
 Javascript:
 
 ```javascript
-class UserAnchor extends Liquid.Tag {
-    render(ctx) {
-        var locals = Liquid.extractLocals(ctx),
-            user = locals.user;
-        return `<a href="/users/${user.id}">${user.name}</a>`;
+engine.registerTag('upper', {
+    parse: function(tagToken, remainTokens) {
+        this.str = tagToken.args; // name
+    },
+    render: function(scope, hash) {
+        var str = Liquid.evalValue(this.str, scope); // 'alice'
+        return str.toUpperCase(); // 'Alice'
     }
-}
-liquid.registerTag("UserAnchor ", UserAnchor);
+});
 ```
 
 Template:
 
 ```html
-{% UserAnchor %}
+{% upper 'alice' %}
 ```
 
-will be rendered as: 
+Output:
 
 ```html
-<!-- locals: {user: {name: alice, id: 123}} -->
-<a href="/users/123">alice</a>
+ALICE
 ```
 
 [brk]: https://github.com/brick-js/brick.js
-[sirlantis/liquid-node]: https://github.com/sirlantis/liquid-node
+[impl]: https://github.com/harttle/shopify-liquid

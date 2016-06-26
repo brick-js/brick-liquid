@@ -4,18 +4,18 @@ const should = chai.should();
 const Liquid = require('..');
 chai.use(require("chai-as-promised"));
 
-describe('include tag', function() {
+describe('include', function() {
     var liquid, user = { name: 'harttle' };
 
     beforeEach(function(){
+        liquid = Liquid();
         mock({
             '/navbar.liquid': "before{% include 'user' %}after",
             '/user.liquid': "<p>{{ name }}{{ id }}</p>",
-            '/user-list-1.liquid': "{% include 'user' name=user.name %}",
-            '/user-list-2.liquid': "{% include 'user' name='hart tle' %}",
-            '/user-list-3.liquid': "{% include 'user' name=username id=3 %}"
+            '/user-list-1.liquid': "{% include 'user' name:user.name %}",
+            '/user-list-2.liquid': "{% include 'user' name:'hart tle' %}",
+            '/user-list-3.liquid': "{% include 'user' name:username id:3 %}"
         });
-        liquid = Liquid();
     });
     afterEach(function(){
         mock.restore();
