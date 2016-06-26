@@ -18,7 +18,9 @@ function liquidFactory(config) {
         parser: engine.parser,
         renderer: engine.renderer,
         evalOutput: engine.evalOutput.bind(engine),
-        handleCache: engine.handleCache.bind(engine)
+        handleCache: engine.handleCache.bind(engine),
+        registerFilter: engine.registerFilter.bind(engine),
+        registerTag: engine.registerTag.bind(engine)
     };
 
     function render(tplPath, ctx, pmodularize, pctrl) {
