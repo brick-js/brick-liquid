@@ -1,6 +1,6 @@
 {
   "name": "brick-liquid",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "liquid template engine for brick.js",
   "author": {
     "name": "harttle"
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "lodash": "^4.6.1",
-    "shopify-liquid": "1.1.9"
+    "shopify-liquid": "1.1.13"
   },
   "devDependencies": {
     "chai": "^3.5.0",
