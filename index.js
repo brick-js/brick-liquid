@@ -8,9 +8,7 @@ function liquidFactory(config) {
     });
     var engine = Liquid(config);
 
-    engine.registerTag('layout', tags.layout);
-    engine.registerTag('block', tags.block);
-    engine.registerTag('include', tags.include);
+    tags(engine);
 
     return {
         render,
@@ -18,29 +16,24 @@ function liquidFactory(config) {
         parser: engine.parser,
         renderer: engine.renderer,
         evalOutput: engine.evalOutput.bind(engine),
-        handleCache: engine.handleCache.bind(engine),
         registerFilter: engine.registerFilter.bind(engine),
         registerTag: engine.registerTag.bind(engine)
     };
 
     function render(tplPath, ctx, pmodularize, pctrl) {
-        var html = engine.renderFile(tplPath, ctx);
-        html = pmodularize(html);
-        return renderAsync(html, pctrl);
-    }
-}
-
-function renderAsync(html, pctrl) {
-    var placeholders = html.match(new RegExp('{{pending\.\\w+}}', 'g'));
-    if (placeholders === null) return Promise.resolve(html);
-
-    var pendings = placeholders.map(placeholder => {
-        var record = tags.register.get(placeholder);
-        return pctrl(record.mid, record.ctx).then(partial => {
-            html = record.map(html, partial);
+        var brick = {
+            pctrl: pctrl,
+            pmodularize: pmodularize,
+            modularized: false
+        };
+        ctx = _.assign(ctx, {
+            brick: brick
         });
-    });
-    return Promise.all(pendings).then(x => renderAsync(html, pctrl));
+        return engine.renderFile(tplPath, ctx)
+            .then(html => {
+                return brick.modularized ? html : pmodularize(html);
+            });
+    }
 }
 
 module.exports = _.assignIn(liquidFactory, Liquid);

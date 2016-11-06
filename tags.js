@@ -1,53 +1,56 @@
 var _ = require('lodash');
-var Liquid = require("shopify-liquid");
+//var Liquid = require("shopify-liquid");
+var Liquid = require("../shopify-liquid");
 var lexical = Liquid.lexical;
 
-var register = (function() {
-    var cache = {};
-    return {
-        set: (key, val) => cache[key] = val,
-        get: key => cache[key],
-        remove: key => delete cache[key]
+var registerWith = function(liquid) {
+    var layout = {
+        parse: function(token, remainTokens) {
+            var match = lexical.value.exec(token.args);
+            if (!match) error(`illegal token ${token.raw}`, token);
+            this.layout = match[0];
+            this.tpls = liquid.parser.parse(remainTokens);
+        },
+        render: function(scope, hash) {
+            var layout = Liquid.evalValue(this.layout, scope);
+            var brick = scope.get('brick');
+            brick.modularized = true;
+            var ctx = _.merge(scope.getAll(), hash);
+            return Promise
+                .all([
+                    liquid.renderer.renderTemplates(this.tpls, scope)
+                        .then(html => brick.pmodularize(html)),
+                    brick.pctrl(layout, ctx)
+                ])
+                .then(arr => {
+                    var child = arr[0];
+                    var parent = arr[1];
+                    return parent.replace('{{block}}', child);
+                });
+        }
     };
-})();
 
-var layout = {
-    parse: function(token, remainTokens) {
-        var match = lexical.value.exec(token.args);
-        if(!match) error(`illegal token ${token.raw}`, token);
-        this.layout = match[0];
-    },
-    render: function(scope, hash) {
-        var layout = Liquid.evalValue(this.layout, scope);
-        var placeholder = `{{pending.${Math.random().toString(36).substr(2)}}}`;
-        register.set(placeholder, {
-            ctx: _.merge(scope.get(), hash),
-            mid: layout,
-            map: (html, layout) => layout.replace('{{block}}', html.replace(placeholder, ''))
-        });
-        return placeholder;
-    }
+    var block = {
+        render: () => Promise.resolve('{{block}}')
+    };
+
+    var include = {
+        parse: function(token, remainTokens) {
+            var match = lexical.value.exec(token.args);
+            if (!match) error(`illegal token ${token.raw}`, token);
+            this.include = match[0];
+        },
+        render: function(scope, hash) {
+            var include = Liquid.evalValue(this.include, scope);
+            var ctx = _.merge(scope.getAll(), hash);
+            var pctrl = scope.get('brick.pctrl');
+            return pctrl(include, ctx);
+        }
+    };
+    
+    liquid.registerTag('layout', layout);
+    liquid.registerTag('block', block);
+    liquid.registerTag('include', include);
 };
-var block = {
-    render: () => '{{block}}'
-};
-var include = {
-    parse: function(token, remainTokens) {
-        var match = lexical.value.exec(token.args);
-        if(!match) error(`illegal token ${token.raw}`, token);
-        this.include = match[0];
-    },
-    render: function(scope, hash) {
-        var include = Liquid.evalValue(this.include, scope);
-        var placeholder = `{{pending.${Math.random().toString(36).substr(2)}}}`;
-        register.set(placeholder, {
-            ctx: _.merge(scope.get(), hash),
-            mid: include,
-            map: (html, partial) => html.replace(placeholder, partial)
-        });
-        return placeholder;
-    }
-};
-module.exports = {
-    block, include, layout, register
-};
+
+module.exports = registerWith;
