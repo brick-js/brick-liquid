@@ -12,6 +12,7 @@ function liquidFactory(config) {
 
     return {
         render,
+        parse: engine.parse.bind(engine),
         parseAndRender: engine.parseAndRender.bind(engine),
         parser: engine.parser,
         renderer: engine.renderer,
