@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var Liquid = require("shopify-liquid");
+var Liquid = require("liquidjs");
 var lexical = Liquid.lexical;
 
 var registerWith = function(liquid) {

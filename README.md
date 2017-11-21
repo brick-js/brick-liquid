@@ -85,8 +85,8 @@ If set to `true`, all templates will be loaded only once (for production usage).
 
 ## Registration of New Filter
 
-Brick-liquid is implemented with [harttle/shopify-liquid][impl] internaly. 
-And the `liquid` object defined above is compatible with [harttle/shopify-liquid][impl] `engine` object.
+Brick-liquid is implemented with [harttle/liquidjs][impl] internaly. 
+And the `liquid` object defined above is compatible with [harttle/liquidjs][impl] `engine` object.
 
 Javascript:
 
@@ -110,7 +110,7 @@ Output:
 
 ## Registration of New Tag
 
-Registration of new tag is compatible with [harttle/shopify-liquid][impl].
+Registration of new tag is compatible with [harttle/liquidjs][impl].
 
 Javascript:
 
@@ -139,4 +139,4 @@ ALICE
 ```
 
 [brk]: https://github.com/brick-js/brick.js
-[impl]: https://github.com/harttle/shopify-liquid
+[impl]: https://github.com/harttle/liquidjs

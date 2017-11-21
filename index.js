@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var Liquid = require("shopify-liquid");
+var Liquid = require("liquidjs");
 var tags = require('./tags.js');
 
 function liquidFactory(config) {
